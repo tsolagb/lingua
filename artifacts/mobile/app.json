@@ -12,6 +12,7 @@
     },
     "android": {
       "package": "com.tsolagbastekian.linguamatch",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/lingua-app-icon.png",
         "backgroundColor": "#FFFFFF"
