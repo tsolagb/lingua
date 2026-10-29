@@ -1,0 +1,77 @@
+.lm-current {
+  min-height: 100vh;
+  background: #f3f4f6;
+  color: #374151;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.lm-current-phone {
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: #fff;
+  overflow: hidden;
+}
+
+.lm-current-scroll { min-height: 100vh; }
+.lm-current-hero {
+  min-height: 205px;
+  padding: 68px 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f5a623;
+}
+.lm-current-logo { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 26px; font-weight: 800; letter-spacing: -.7px; }
+.lm-current-mark {
+  width: 42px; height: 42px; border-radius: 13px; position: relative;
+  display: grid; place-items: center; transform: rotate(-5deg);
+  background: #fff8ec; box-shadow: 0 3px 5px #a9581230;
+}
+.lm-current-bubble { width: 30px; height: 25px; border-radius: 10px; display: grid; place-items: center; color: #d4761a; background: #3d817b; font-size: 22px; line-height: 1; }
+.lm-current-mark i { position: absolute; right: 4px; bottom: 4px; width: 8px; height: 8px; border: 2px solid #fff8ec; border-radius: 50%; background: #ffd166; }
+.lm-current-demo { display: flex; align-items: center; gap: 12px; margin: 36px 0 14px; }
+.lm-current-word { padding: 12px 18px; border-radius: 18px; font-size: 18px; font-weight: 700; box-shadow: 0 4px 8px #00000026; }
+.lm-current-word-left { color: #1d4ed8; background: #dbeafe; }
+.lm-current-word-right { color: #5b21b6; background: #ede9fe; }
+.lm-current-arrow { font-size: 20px; }
+.lm-current-panel { display: flex; flex-direction: column; gap: 18px; padding: 24px 20px 36px; }
+.lm-current-progress { display: flex; align-items: center; padding: 16px; border: 1.5px solid #f5a623; border-radius: 18px; background: #fff3cd; }
+.lm-current-progress > div { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.lm-current-progress b { font-size: 22px; }
+.lm-current-progress span { display: flex; flex-direction: column; }
+.lm-current-progress strong { color: #15803d; font-size: 22px; line-height: 26px; }
+.lm-current-progress small { color: #4ade80; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.lm-current-progress > i { width: 1px; height: 36px; background: #e5e7eb; }
+.lm-current-streak { display: flex; align-items: center; gap: 16px; padding: 18px 20px; border-radius: 20px; color: white; background: linear-gradient(135deg, #ff8c00, #ff6b00); box-shadow: 0 4px 12px #ff6b004d; }
+.lm-current-streak-main { flex: 1; display: flex; align-items: center; gap: 12px; }
+.lm-current-flame { font-size: 44px; }
+.lm-current-streak-count { display: flex; align-items: flex-end; gap: 6px; }
+.lm-current-streak-count strong { font-size: 42px; line-height: 46px; }
+.lm-current-streak-count span { margin-bottom: 4px; font-size: 13px; font-weight: 700; line-height: 16px; }
+.lm-current-streak p { margin: 2px 0 0; color: #ffffffd1; font-size: 12px; font-weight: 600; }
+.lm-current-streak > i { width: 1px; height: 50px; background: #ffffff4d; }
+.lm-current-best { min-width: 56px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.lm-current-best strong { font-size: 26px; }
+.lm-current-best span { color: #fffc; font-size: 11px; font-weight: 600; line-height: 14px; text-align: center; }
+.lm-current-cta { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0 0 0; padding: 17px; border: 0; border-radius: 20px; color: #fff; background: #f5a623; box-shadow: 0 4px 10px #c0601066; font: inherit; font-size: 19px; font-weight: 800; cursor: pointer; }
+.lm-current-cta b { font-size: 26px; }
+.lm-current-language-section { display: flex; flex-direction: column; gap: 10px; }
+.lm-current-language-section h2 { margin: 0; color: #374151; font-size: 14px; font-weight: 700; letter-spacing: .2px; }
+.lm-current-language-row { display: flex; gap: 8px; }
+.lm-current-language { position: relative; flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 12px 6px; border: 2px solid #e5e7eb; border-radius: 16px; background: #f7f7f7; color: #374151; font: inherit; cursor: pointer; }
+.lm-current-language.is-active { border-color: #d4761a; background: #f5a623; color: #fff; }
+.lm-current-flag { font-size: 26px; }
+.lm-current-language strong { font-size: 13px; }
+.lm-current-language small { color: #9b9bb4; font-size: 10px; }
+.lm-current-language.is-active small { color: #0000008c; }
+.lm-current-language em { position: absolute; top: 6px; right: 6px; width: 16px; height: 16px; border-radius: 50%; display: grid; place-items: center; color: white; background: #ffffff59; font-size: 12px; font-style: normal; }
+.lm-current-features { display: flex; gap: 8px; }
+.lm-current-features > div { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 4px; border-radius: 14px; background: #f7f7f7; }
+.lm-current-features span { font-size: 22px; }
+.lm-current-features b { color: #374151; font-size: 11px; text-align: center; }
+.lm-current-coffee { padding: 13px; border: 2px solid #f59e0b; border-radius: 14px; color: #92400e; background: #fffbeb; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+.lm-current-footer { margin: 0; padding-bottom: 4px; color: #9b9bb4; font-size: 12px; text-align: center; }
+.lm-current-notice { min-height: 16px; margin: -10px 0 0; color: #9b9bb4; font-size: 11px; text-align: center; }
+@media (min-width: 600px) { .lm-current-phone { margin: 24px auto; min-height: calc(100vh - 48px); border-radius: 24px; box-shadow: 0 20px 60px #1118271f; } }

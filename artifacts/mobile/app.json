@@ -1,0 +1,68 @@
+{
+  "expo": {
+    "name": "LinguaMatch",
+    "slug": "workspace",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/lingua-app-icon.png",
+    "scheme": "mobile",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": false
+    },
+    "android": {
+      "package": "com.tsolagbastekian.linguamatch",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/lingua-app-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/lingua-app-icon.png"
+    },
+    "plugins": [
+      [
+        "expo-router",
+        {
+          "origin": "https://replit.com/"
+        }
+      ],
+      "expo-font",
+      "expo-web-browser",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/lingua-app-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#FFFFFF"
+        }
+      ],
+      "expo-asset",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Allow LinguaMatch to hear your voice only when you choose Say It practice.",
+          "recordAudioAndroid": true,
+          "enableBackgroundRecording": false,
+          "enableBackgroundPlayback": false
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "214402c8-f9a7-480f-a227-33dfd09ff8a2"
+      }
+    },
+    "owner": "tsolagbs-team"
+  }
+}

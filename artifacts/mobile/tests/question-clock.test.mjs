@@ -1,0 +1,42 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { createQuestionClock } from '../lib/arcade/question-clock.ts';
+test('an expired previous question cannot time out a paused listening question', () => {
+  let now = 0;
+  const clock = createQuestionClock(10, () => now);
+  const old = clock.open('grammar');
+  now = 11000;
+  assert.equal(clock.remaining(old), 0);
+  const listen = clock.open('listen', true);
+  assert.equal(clock.remaining(old), null);
+  assert.equal(clock.remaining(listen), null);
+  now += 20000;
+  assert.equal(clock.remaining(listen), null);
+  assert.equal(clock.arm(listen), true);
+  assert.equal(clock.remaining(listen), 10);
+});
+test('reading fallback has a fresh deadline, ignores stale ticks and cannot rearm after answering', () => {
+  let now = 0;
+  const clock = createQuestionClock(10, () => now);
+  const audio = clock.open('listen');
+  now = 9990;
+  const reading = clock.open('listen');
+  assert.equal(clock.remaining(audio), null);
+  assert.equal(clock.remaining(reading), 10);
+  now += 250;
+  assert.equal(clock.remaining(reading), 9.75);
+  assert.equal(clock.arm(reading), false);
+  clock.close(reading);
+  assert.equal(clock.remaining(reading), null);
+  assert.equal(clock.arm(reading), false);
+});
+test('replay and repeated words still get unique clock identities', () => {
+  const clock = createQuestionClock(10, () => 100);
+  const first = clock.open('hello');
+  const second = clock.open('hello');
+  clock.close(first);
+  assert.equal(clock.token(), second);
+  assert.equal(clock.arm(first), false);
+  assert.equal(clock.remaining(first), null);
+  assert.equal(clock.remaining(second), 10);
+});

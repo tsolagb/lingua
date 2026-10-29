@@ -1,0 +1,19 @@
+diff --git a/index.js b/index.js
+index 56c26025074cbcf218e3ec4d810662da93f8024e..717a0526bf438b7c9a0bd40aaa7794dc49d8b1b6 100644
+--- a/index.js
++++ b/index.js
+@@ -395,6 +395,14 @@ module.exports = class CachePolicy {
+     evaluateRequest(req) {
+         this._assertRequestHasHeaders(req);
+ 
++        // Do not let client max-stale or stale-while-revalidate revive entries
++        // that maxAge() deliberately zeroed for security (e.g. shared cookies).
++        // Conservatively revalidate all zero-TTL responses, including max-age=0.
++        // https://github.com/kornelski/http-cache-semantics/issues/65
++        if (!this.storable() || this.maxAge() === 0) {
++            return this._evaluateRequestMissResult(req);
++        }
++
+         // In all circumstances, a cache MUST NOT ignore the must-revalidate directive
+         if (this._rescc['must-revalidate']) {
+             return this._evaluateRequestMissResult(req);

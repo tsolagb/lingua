@@ -1,0 +1,303 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: learner-progress
+    description: Authenticated learner progress synchronization
+  - name: legal
+    description: Legal document acknowledgements
+  - name: feedback
+    description: Anonymous learner reports about vocabulary and grammar content
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /learner-progress:
+    get:
+      operationId: getLearnerProgress
+      tags: [learner-progress]
+      summary: Get the signed-in learner's saved progress
+      responses:
+        "200":
+          description: Saved progress, or an empty snapshot for a new account
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LearnerProgressResponse"
+        "401":
+          description: Authentication required
+    put:
+      operationId: saveLearnerProgress
+      tags: [learner-progress]
+      summary: Merge and save the signed-in learner's progress
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LearnerProgressRequest"
+      responses:
+        "200":
+          description: The merged saved progress
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LearnerProgressResponse"
+        "400":
+          description: Invalid progress snapshot
+        "401":
+          description: Authentication required
+  /legal-acceptances:
+    post:
+      operationId: recordLegalAcceptance
+      tags: [legal]
+      summary: Record the signed-in adult's agreement to the current legal documents
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LegalAcceptanceInput"
+      responses:
+        "201":
+          description: Legal document agreement recorded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LegalAcceptanceResponse"
+        "400":
+          description: Invalid legal acceptance
+        "401":
+          description: Authentication required
+  /mistake-reports:
+    post:
+      operationId: submitMistakeReport
+      tags: [feedback]
+      summary: Submit an anonymous vocabulary or grammar content report
+      description: Stores the issue details without an account identifier or contact information.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MistakeReportInput"
+      responses:
+        "201":
+          description: Report received
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MistakeReportResponse"
+        "400":
+          description: Invalid report
+        "429":
+          description: Too many reports submitted
+  /speech/synthesize:
+    post:
+      operationId: synthesizeSpeech
+      tags: [speech]
+      summary: Cached natural AI pronunciation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SpeechSynthesisRequest"
+      responses:
+        "200":
+          description: MP3 audio; X-Audio-Cache indicates hit, miss or shared generation.
+          content:
+            audio/mpeg:
+              schema:
+                type: string
+                format: binary
+        "400":
+          description: Invalid text, language or speed
+        "429":
+          description: Rate or generation budget exceeded
+        "503":
+          description: AI speech unavailable; use cached or device audio
+  /speech/transcribe:
+    post:
+      operationId: transcribeSpeech
+      tags: [speech]
+      summary: Transcribe a short recording and compare its text
+      description: Maximum 6 MB and 30 seconds. Recordings are deleted after processing. Similarity is a text match, not an acoustic pronunciation grade.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/SpeechTranscriptionRequest"
+      responses:
+        "200":
+          description: Transcription and text-similarity scores
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SpeechTranscriptionResponse"
+        "400":
+          description: Invalid or oversized recording
+        "429":
+          description: Too many recording requests
+        "503":
+          description: Transcription unavailable
+components:
+  schemas:
+    SpeechLanguage:
+      type: string
+      enum: [italian, french, spanish, armenian]
+    SpeechSynthesisRequest:
+      type: object
+      additionalProperties: false
+      required: [text, language]
+      properties:
+        text:
+          type: string
+          minLength: 1
+          maxLength: 1200
+        language:
+          $ref: "#/components/schemas/SpeechLanguage"
+        speed:
+          type: string
+          enum: [normal, slow]
+          default: normal
+    SpeechTranscriptionRequest:
+      type: object
+      required: [audio, expectedText, language]
+      properties:
+        audio:
+          type: string
+          format: binary
+        expectedText:
+          type: string
+          minLength: 1
+          maxLength: 500
+        language:
+          $ref: "#/components/schemas/SpeechLanguage"
+    SpeechTranscriptionResponse:
+      type: object
+      required: [transcription, similarity, similarityScore, scoreType, language]
+      properties:
+        transcription:
+          type: string
+        similarity:
+          type: number
+          minimum: 0
+          maximum: 1
+        similarityScore:
+          type: number
+          minimum: 0
+          maximum: 100
+        scoreType:
+          type: string
+          enum: [transcript_similarity]
+        language:
+          $ref: "#/components/schemas/SpeechLanguage"
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    LearnerProgressRequest:
+      type: object
+      properties:
+        snapshot:
+          type: object
+          additionalProperties: true
+      required:
+        - snapshot
+    LearnerProgressResponse:
+      type: object
+      properties:
+        snapshot:
+          type: object
+          additionalProperties: true
+        updatedAt:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+        - snapshot
+    LegalAcceptanceInput:
+      type: object
+      properties:
+        termsVersion:
+          type: string
+          enum: [terms-2026-10-20-draft-v1]
+        privacyVersion:
+          type: string
+          enum: [privacy-2026-10-20-draft-v2]
+        adultAttested:
+          type: boolean
+          const: true
+      required:
+        - termsVersion
+        - privacyVersion
+        - adultAttested
+    LegalAcceptanceResponse:
+      type: object
+      properties:
+        termsVersion:
+          type: string
+        privacyVersion:
+          type: string
+        adultAttested:
+          type: boolean
+        acceptedAt:
+          type: string
+          format: date-time
+      required:
+        - termsVersion
+        - privacyVersion
+        - adultAttested
+        - acceptedAt
+    MistakeReportInput:
+      type: object
+      additionalProperties: false
+      required: [language, issueType, game, reportedContent]
+      properties:
+        language:
+          $ref: "#/components/schemas/SpeechLanguage"
+        issueType:
+          type: string
+          enum: [vocabulary, grammar]
+        game:
+          type: string
+          minLength: 1
+          maxLength: 80
+        reportedContent:
+          type: string
+          minLength: 3
+          maxLength: 1000
+        suggestedCorrection:
+          type: string
+          maxLength: 500
+    MistakeReportResponse:
+      type: object
+      required: [receivedAt]
+      properties:
+        receivedAt:
+          type: string
+          format: date-time
+
